@@ -71,7 +71,6 @@ def backprop(y_target,y_layer, df_layer, Weights, Biases, NumLayers,dw_layer, db
         db_layer[-2-j]=delta.sum(0)/batchsize
         
         
-        
 def gradient_step(eta,NumLayers,dw_layer, db_layer, Weights, Biases): # update weights & biases (after backprop!)
 #    global dw_layer, db_layer, Weights, Biases
     
@@ -101,10 +100,11 @@ def myFunc(x0,x1):
 
 xrange=np.linspace(-0.5,0.5,40)
 X0,X1=np.meshgrid(xrange,xrange)
-#plt.imshow(myFunc(X0,X1),interpolation='nearest',origin='lower')
-#plt.colorbar()
-#plt.show()
 
+fig=plt.figure(figsize=(10,10))
+plt.imshow(myFunc(X0,X1),interpolation='nearest',origin='lower')
+plt.colorbar()
+plt.show()
 
 def make_batch(batchsize):
    
@@ -114,12 +114,10 @@ def make_batch(batchsize):
     targets[:,0]=myFunc(inputs[:,0],inputs[:,1])
     return(inputs,targets)
 
-
 # set up all the weights and biases
 
-
-NumLayers=5 # does not count input-layer (but does count output)
 LayerSizes=[2,30,30,30,30,1] # input-layer,hidden-1,hidden-2,...,output-layer
+NumLayers = len(LayerSizes) - 1    # does not count input-layer (but does count output)
 
 Weights=[np.random.uniform(low=-0.5,high=+0.5,size=[ LayerSizes[j],LayerSizes[j+1] ]) for j in range(NumLayers)]
 Biases=[np.zeros(LayerSizes[j+1]) for j in range(NumLayers)]        
@@ -132,26 +130,34 @@ dw_layer=[np.zeros([LayerSizes[j],LayerSizes[j+1]]) for j in range(NumLayers)]
 db_layer=[np.zeros(LayerSizes[j+1]) for j in range(NumLayers)]
 
 
-# define the batchsize
-batchsize=1000
-
-
-
-    
-    
+   
 # Now: the training! (and plot the cost function)
 eta=.1
-batches=2000
+batches=100
 costs=np.zeros(batches)
 
 for k in range(batches):
-    y_in,y_target= make_batch(batchsize)
-    costs[k]=train_net(y_in,y_target,eta, y_layer, df_layer, Weights, Biases, NumLayers,dw_layer, db_layer, batchsize)
+    y_in,y_target= make_batch(batches)
+    costs[k]=train_net(y_in,y_target,eta, y_layer, df_layer, Weights, Biases, NumLayers,dw_layer, db_layer, batches)
 
-plt.plot(costs)
+#fig=plt.figure(figsize=(10,10))
+#plt.plot(costs)
+#plt.show()
+
+
+# a 'test' batch that includes all the points on the image grid
+test_batchsize=np.shape(X0)[0]*np.shape(X0)[1]
+testsample=np.zeros([test_batchsize,2])
+testsample[:,0]=X0.flatten()
+testsample[:,1]=X1.flatten()
+
+# show the output of this net
+testoutput=apply_net_simple(testsample, y_layer, NumLayers)
+fig=plt.figure(figsize=(10,10))
+#myim=plt.imshow(np.reshape(testoutput,np.shape(X0)),origin='lower',interpolation='none')
+plt.imshow(np.reshape(testoutput,np.shape(X0)),origin='lower',interpolation='none')
+plt.colorbar()
 plt.show()
-
-
         
 
 
