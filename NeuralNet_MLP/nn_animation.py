@@ -90,13 +90,19 @@ y_in =  np.zeros([batchsize,2])
 y_in[:,0]=v0.flatten() # fill first component (index 0)
 y_in[:,1]=v1.flatten() # fill second component
 
+print (y_in.shape)
+
 # use the MxM input grid that we generated above 
 y_out = apply_multi_net(y_in,Weights, Biases, WeightsFinal, BiasesFinal, Nlayers) # apply net to all these samples!
 
-
+print (y_out.shape)
 #y_in_2D = np.reshape(y_in[:,0],[M,M])
 y_2D = np.reshape(y_out[:,0],[M,M]) # back to 2D image
-#
+
+
+print(y_2D.shape)
+
+
 #plt.figure(1)
 #plt.subplot(211)
 #plt.imshow(y_in_2D,origin='lower',extent=[-0.5,0.5,-0.5,0.5],interpolation='nearest',cmap='RdBu')
