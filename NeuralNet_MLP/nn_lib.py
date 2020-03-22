@@ -6,7 +6,6 @@ Created on Sat Mar 21 13:16:10 2020
 """
 
 import numpy as np
-import matplotlib.pyplot as plt 
 
 def net_f_df(z): # calculate f(z) and f'(z)
 #    val=1/(1+np.exp(-z))
@@ -15,8 +14,7 @@ def net_f_df(z): # calculate f(z) and f'(z)
     val=z*(z>0)
     return(val,z>0) # return both f and f'    
     
-    
-    
+ 
 def forward_step(y,w,b): # calculate values in next layer, from input y
     
     z = np.dot(y,w)+b # w=weights, b=bias vector for next layer
